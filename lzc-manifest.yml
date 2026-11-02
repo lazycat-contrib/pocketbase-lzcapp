@@ -6,16 +6,14 @@ application:
       backend: file:///lzcapp/pkg/content/licenses/
     - location: /
       backend: http://pocketbase:8090/
-
 services:
   pocketbase:
     # upstream: ghcr.io/muchobien/pocketbase:0.40.6
-    image: docker.1ms.run/ghcr.io/muchobien/pocketbase:0.40.6
+    image: ghcr.1ms.run/muchobien/pocketbase:0.40.6
     environment:
       - TZ=Asia/Shanghai
     binds:
       - /lzcapp/var/pb_data:/pb_data
-
 usage: |
   PocketBase 是单文件后端：数据库、鉴权、文件存储、管理后台和 REST API 都在一个可执行文件里。
 
