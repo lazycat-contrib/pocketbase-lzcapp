@@ -1,0 +1,36 @@
+application:
+  subdomain: pocketbase
+  multi_instance: false
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://pocketbase:8090/
+
+services:
+  pocketbase:
+    # upstream: ghcr.io/muchobien/pocketbase:0.40.6
+    image: docker.1ms.run/ghcr.io/muchobien/pocketbase:0.40.6
+    environment:
+      - TZ=Asia/Shanghai
+    binds:
+      - /lzcapp/var/pb_data:/pb_data
+
+usage: |
+  PocketBase 是单文件后端：数据库、鉴权、文件存储、管理后台和 REST API 都在一个可执行文件里。
+
+  使用方法：
+  1. 打开应用会跳到 /_/ 管理后台，第一次访问时创建管理员账号（邮箱 + 密码）。
+  2. 在后台新建 Collection（数据表），定义字段。
+  3. 直接用 REST API 读写数据，也可以配 API Rules 控制访问权限。
+
+  数据与安全：
+  - 数据库（SQLite）、上传的文件和配置都保存在 /lzcapp/var/pb_data，卸载应用会一并删除，请定期备份。
+  - 本包不预置任何管理员账号或默认口令；首个管理员由你在首次访问时创建。
+  - 应用经懒猫入口鉴权访问。
+
+  说明：
+  - 单容器部署，无需外部数据库。
+  - 镜像来自 ghcr.io（muchobien/pocketbase 社区镜像，跟随上游版本）。
+  - 未配置邮件服务，密码重置、邮箱验证等依赖邮件的功能不可用。
+  - 未做真机验证：创建管理员、建表、调 API、上传文件以及重启后持久化均未在设备上实测。
